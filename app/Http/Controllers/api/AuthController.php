@@ -23,14 +23,19 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $imageName = helper::uploadFile($request->file('image'), 'users/');
-
+        $userImage = helper::uploadFile($request->file('image'), 'users/photos/');
+        $userCover = helper::uploadFile($request->file('cover'), 'users/covers/');
+        $token = Str::random(64);
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'birthday'    => $request->birthday,
             'password' => Hash::make($request->password),
-            'image'    => $imageName,
+            'birthday'    => $request->birthday,
+            'latitude'    => $request->latitude,
+            'longitude'    => $request->longitude,
+            'image'    => $userImage,
+            'cover'    => $userCover,
+            'token'    => $token,
             'role_id'  => Role::where('name', 'user')->value('id'),
         ]);
         // Send email verification notification
@@ -39,6 +44,7 @@ class AuthController extends Controller
         return response()->json([
             "status"  => true,
             'message' => "You are successfully registered",
+            "data" => new UserResource($user),
         ]);
     }
 

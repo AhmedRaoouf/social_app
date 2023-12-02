@@ -27,8 +27,13 @@ class registerRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z0-9_]+$/',],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'max:50'],
+            'image' => ['nullable', 'image'],
+            'cover' => ['nullable', 'image'],
             'birthday' => ['nullable'],
-            'image' => ['nullable', 'image', 'max:5120'], // max 5 MB
+            'longitude' => ['nullable'],
+            'latitude' => ['nullable'],
+            'otp' => ['nullable'],
+            'token' => ['nullable'],
         ];
         return $rules;
     }
