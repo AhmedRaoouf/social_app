@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
 
-    public function register(RegisterRequest $request)
+    public function register(registerRequest $request)
     {
         $userImage = helper::uploadFile($request->file('image'), 'users/photos/');
         $userCover = helper::uploadFile($request->file('cover'), 'users/covers/');
