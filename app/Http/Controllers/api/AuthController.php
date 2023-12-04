@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Helpers\helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\loginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\registerRequest;
 use App\Http\Resources\UserResource;
 use App\Mail\ForgetPasswordMail;
 use App\Models\Role;
