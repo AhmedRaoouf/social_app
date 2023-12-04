@@ -15,18 +15,22 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $protocol = $request->isSecure() ? 'https' : 'http';
+
+        // Override Laravel's URL generation configuration to force http
+        \URL::forceScheme($protocol);
+
         return [
             'token' => $this->token,
             'name' => $this->name,
             'email' => $this->email,
             'email_active' => $this->email_verified_at ? 'Yes' : 'No',
             'role' => Role::where('id', $this->role_id)->value('name'),
-            'image' => $this->image ? asset('uploads')."/$this->image" : 'Not Found',
-            'cover' => $this->cover ? asset('uploads')."/$this->cover" : 'Not Found',
+            'image' => $this->image ? asset('uploads') . "/$this->image" : null,
+            'cover' => $this->cover ? asset('uploads') . "/$this->cover" : null,
             'birthday' => $this->birthday,
             'longitude' => $this->longitude,
             'latitude' => $this->latitude,
-            
         ];
     }
 }
