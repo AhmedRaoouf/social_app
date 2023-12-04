@@ -67,7 +67,7 @@ class AuthController extends Controller
         return response()->json([
             'status'  => false,
             'message' => 'Invalid credentials',
-        ], 401);
+        ], 200);
     }
 
     public function logout(Request $request)
@@ -99,7 +99,7 @@ class AuthController extends Controller
         if ($vaildator->fails()) {
             return response()->json([
                 'errors' => $vaildator->errors()->all(),
-            ], 422);
+            ], 200);
         }
 
         $user = User::where('email', $request->email)->first();
@@ -141,17 +141,17 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()], 422);
+            return response()->json(['errors' => $validator->errors()->all()], 200);
         }
 
         $user = User::where('otp', $otp)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'OTP is not correct'], 404);
+            return response()->json(['message' => 'OTP is not correct'], 200);
         }
 
         if (Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'New password must be different from the previous password'], 422);
+            return response()->json(['message' => 'New password must be different from the previous password'], 200);
         }
 
         $user->update([
@@ -174,7 +174,7 @@ class AuthController extends Controller
             return response()->json([
                 'status'  => false,
                 'message' => 'User not found.',
-            ], 404);
+            ], 200);
         }
 
         if (!$user->hasVerifiedEmail()) {
