@@ -16,11 +16,10 @@ class Api_auth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token =$request->cookie('auth_token');
-
+        $token =$request->header('auth_token');
         if($token !== null)
         {
-            $user = User::where('token',"=",$token)->first();
+            $user = User::where('token',$token)->first();
             if($user !==null)
             {
                 return $next($request);

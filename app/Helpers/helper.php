@@ -9,7 +9,7 @@ class helper
     {
         if ($file) {
             $ext = $file->getClientOriginalExtension();
-            $filename = $prefix . time() . '.' . $ext;
+            $filename = $prefix  . uniqid() . '.' . $ext;
             $destination = public_path('uploads/' . $subdirectory);
             $file->move($destination, $filename);
             return $subdirectory.$filename;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,12 @@ Route::post('/reset/{otp}',[AuthController::class,'reset']);
 
 Route::middleware(['api_auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    //Profile
+    Route::get('/profile/show', [ProfileController::class, 'show']);
+    Route::post('/profile/update', [ProfileController::class, 'update']);
+    Route::delete('/profile/delete', [ProfileController::class, 'delete_account']);
+    Route::post('/profile/update_password', [ProfileController::class, 'update_password']);
 });
 
 Route::post('/email/verify', [AuthController::class,'sendVerificationLink']);
