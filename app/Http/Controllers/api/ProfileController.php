@@ -14,7 +14,7 @@ class ProfileController extends Controller
 {
     public function show(Request $request)
     {
-        $token = $request->header('auth_token');
+        $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
         return response()->json([
             'status' => true,
@@ -24,7 +24,7 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $token = $request->header('auth_token');
+        $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
         $validator = Validator::make($request->all(), [
             'name' => ['nullable', 'string'],
@@ -90,7 +90,7 @@ class ProfileController extends Controller
 
     public function delete_account(Request $request)
     {
-        $token = $request->header('auth_token');
+        $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
         $user->delete();
         return response()->json([
@@ -101,7 +101,7 @@ class ProfileController extends Controller
 
     public function update_password(Request $request)
     {
-        $token = $request->header('auth_token');
+        $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
 
         $validator = Validator::make($request->all(), [

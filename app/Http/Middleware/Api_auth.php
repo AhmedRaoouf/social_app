@@ -16,7 +16,7 @@ class Api_auth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token =$request->header('auth_token');
+        $token =$request->header('Authorization');
         if($token !== null)
         {
             $user = User::where('token',$token)->first();
