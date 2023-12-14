@@ -53,15 +53,15 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
             $token = Str::random(64);
-            $user->update(['token' => $token]);
-            $cookie = cookie('auth_token', $token, 60 * 24 * 30);
+            $user = Auth::user();
+            $user->token = $token;
+            $user->save();
             return response()->json([
                 'status'  => true,
                 'message' => 'Login successful',
                 'data'    => new UserResource($user),
-            ])->withCookie($cookie);
+            ]);
         }
 
         return response()->json([

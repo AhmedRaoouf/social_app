@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Helpers\helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\profileRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,22 +23,10 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(profileRequest $request)
     {
         $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
-        $validator = Validator::make($request->all(), [
-            'name' => ['nullable', 'string'],
-            'image' => ['nullable', 'image'],
-            'cover' => ['nullable', 'image'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors(),
-            ]);
-        }
 
         if ($user !== null) {
             if ($request->name) {
@@ -75,7 +64,12 @@ class ProfileController extends Controller
                 $userCover = helper::uploadFile($request->file('cover'), 'users/covers/');
                 $user->update(['cover' => $userCover]);
             }
-
+            if ($request->longitude && $request->latitude) {
+                $user->update([
+                    'longitude' => $request->longitude,
+                    'latitude' => $request->latitude,
+                ]);
+            }
             return response()->json([
                 'status' => true,
                 'message' => "Your Profile updated successfully",
@@ -90,13 +84,30 @@ class ProfileController extends Controller
 
     public function delete_account(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'password' => ['required', 'string', 'min:8', 'max:50'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors(),
+            ]);
+        }
         $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
-        $user->delete();
-        return response()->json([
-            'status' => true,
-            'message' => "User $user->name deleted successfully",
-        ]);
+        $password_Correct = Hash::check($request->password, $user->password);
+        if ($password_Correct) {
+            $user->delete();
+            return response()->json([
+                'status' => true,
+                'message' => "User $user->name deleted successfully",
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                "message" => 'Your password is not correct'
+            ]);
+        }
     }
 
     public function update_password(Request $request)
