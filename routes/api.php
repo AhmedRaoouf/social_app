@@ -29,8 +29,8 @@ Route::middleware(['api_auth'])->group(function () {
     //Profile
     Route::get('/profile/show', [ProfileController::class, 'show']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
-    Route::delete('/profile/delete', [ProfileController::class, 'delete_account']);
     Route::post('/profile/update_password', [ProfileController::class, 'update_password']);
+    Route::delete('/profile/delete', [ProfileController::class, 'delete_account']);
 });
 
 Route::post('/email/verify', [AuthController::class,'sendVerificationLink']);

@@ -84,6 +84,8 @@ class ProfileController extends Controller
 
     public function delete_account(Request $request)
     {
+        $token = $request->header('Authorization');
+        $user = User::where('token', $token)->first();
         $validator = Validator::make($request->all(), [
             'password' => ['required', 'string', 'min:8', 'max:50'],
         ]);
@@ -93,8 +95,6 @@ class ProfileController extends Controller
                 'message' => $validator->errors(),
             ]);
         }
-        $token = $request->header('Authorization');
-        $user = User::where('token', $token)->first();
         $password_Correct = Hash::check($request->password, $user->password);
         if ($password_Correct) {
             $user->delete();
