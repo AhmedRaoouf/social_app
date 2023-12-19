@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\PostController;
 use App\Http\Controllers\api\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,12 @@ Route::middleware(['api_auth'])->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update']);
     Route::post('/profile/update_password', [ProfileController::class, 'update_password']);
     Route::delete('/profile/delete', [ProfileController::class, 'delete_account']);
+
+    //Posts
+    Route::post('/user/post/create', [PostController::class, 'createPost']);
+    Route::post('/user/{userId}/posts/{postId}/react', [PostController::class, 'reactToPost']);
+    Route::post('/user/{userId}/posts/{postId}/comment', [PostController::class, 'addCommentToPost']);
+    Route::get('/user/{userId}/posts', [PostController::class, 'getUserPosts']); #Show other user posts
 });
 
 Route::post('/email/verify', [AuthController::class,'sendVerificationLink']);

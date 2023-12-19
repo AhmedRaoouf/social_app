@@ -32,33 +32,23 @@ class ProfileController extends Controller
             if ($request->name) {
                 $user->update(['name' => $request->name]);
             }
-            if ($request['image']) {
+            if ($request->image) {
                 $oldImage = $user->image;
                 $oldImagePath = public_path('uploads/' . $oldImage);
                 if ($oldImage && $oldImagePath) {
                     unlink('uploads/' . $oldImage);
-                } else {
-                    return response()->json([
-                        'status' => false,
-                        'message' => "Image file not found in public folder",
-                    ]);
                 }
                 $userImage = helper::uploadFile($request->file('image'), 'users/photos/');
                 $user->update(['image' => $userImage]);
             }
 
-            if ($request['cover']) {
+            if ($request->cover) {
                 $oldCover = $user->cover;
                 if (!empty($oldCover)) {
                     $oldCoverPath = public_path('uploads/' . $oldCover);
 
                     if (file_exists($oldCoverPath)) {
                         unlink('uploads/' . $oldCover);
-                    } else {
-                        return response()->json([
-                            'status' => false,
-                            'message' => "Cover file not found in public folder",
-                        ]);
                     }
                 }
                 $userCover = helper::uploadFile($request->file('cover'), 'users/covers/');
