@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Kreait\Firebase\Exception\Auth\UserNotFound;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class AuthController extends Controller
 {
@@ -206,15 +208,30 @@ class AuthController extends Controller
 
             return redirect()->to('/'); // Redirect to your desired location after verification
         }
-
     }
-    // public function google()
-    // {
-    //     $CLIENT_ID = "https://203347747842-2uq462l0kh21istb4db60mm87os3tark.apps.googleusercontent.com";
-    //     $client = new Google_Client(['client_id' => $CLIENT_ID]);
-    //     $id_token = 111091520510786751491;
-    //     $payload = $client->verifyIdToken($id_token);
-
-    //     dd($payload );
-    // }
+    public function handleGoogleLogin(Request $request, string $uid)
+    {
+        try {
+            $firebase = Firebase::auth();
+            $userData = $firebase->getUser($uid);
+            $user = User::where('email', $userData->email)->first();
+            if ($user != null) {
+                Auth::login($user);
+                return helper::responseData(new UserResource($user), 'Login successful');
+            } else {
+                // Perform user registration
+                $access_token = Str::random(64);
+                $newuser = new User();
+                $newuser->name = $userData->displayName;
+                $newuser->email = $userData->email;
+                $newuser->password = Hash::make($userData->uid . now());
+                $newuser->token = $access_token;
+                $newuser->role_id = Role::where('name', 'user')->value('id');
+                $newuser->save();
+                return helper::responseData(new UserResource($newuser), 'You are successfully registered');
+            }
+        } catch (UserNotFound $e) {
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
 }

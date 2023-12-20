@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login",[AuthController::class, "login"])->name('login');
-// Route::post("/login/google",[AuthController::class, "google"]);
+Route::post('login/google/callback/{uid}', [AuthController::class, "handleGoogleLogin"]);
 
 Route::post('/forget',[AuthController::class,'forget']);
 Route::post('/otp/{otp}',[AuthController::class,'otp']);
@@ -39,7 +39,7 @@ Route::middleware(['api_auth'])->group(function () {
     Route::post('/user/posts/{postId}/react', [PostController::class, 'reactToPost']);
     Route::post('/user/posts/{postId}/comment', [PostController::class, 'addCommentToPost']);
     Route::get('/user/{userId}/posts', [PostController::class, 'getUserPosts']); #Show other user posts
-    
+
 });
 
 Route::post('/email/verify', [AuthController::class,'sendVerificationLink']);

@@ -28,4 +28,10 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function getCommentAttribute()
+    {
+        $comments = Comment::where('post_id',$this->id)->get();
+        return $comments;
+    }
+
 }
