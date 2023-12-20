@@ -35,6 +35,7 @@ class PostController extends Controller
                 'content' => $request->content,
                 'image' => $userImage,
             ]);
+            
             return helper::responseData(new PostResource($post), 'Post created successfully');
         } else {
             return helper::responseError('Missing data in request');
