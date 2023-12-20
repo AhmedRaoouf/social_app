@@ -18,7 +18,7 @@ class helper
         }
     }
 
-    public static function responseError($statusCode = 200, $msg)
+    public static function responseError($msg, $statusCode = 200)
     {
         return response()->json([
             'status' => false,
@@ -28,13 +28,11 @@ class helper
 
     public static function responseData($data, $msg = '')
     {
-        $response = [
-            'status' => true,
-            'data' => count($data) == 0 ? 'No data available' : $data,
-        ];
+        $response = ['status' => true];
         if (!empty($msg)) {
             $response['msg'] = $msg;
         }
+        $response['data'] = $data;
         return response()->json($response);
     }
 }

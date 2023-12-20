@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id', 'user_id', 'content', 'image',
+        'id', 'user_id', 'content', 'image','total_likes','total_comments'
     ];
 
     public function user()
@@ -18,12 +18,12 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function reactions()
+    public function post_reacts()
     {
         return $this->hasMany(Reaction::class);
     }
 
-    public function comments()
+    public function post_comments()
     {
         return $this->hasMany(Comment::class);
     }

@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Mail\ForgetPasswordMail;
 use App\Models\Role;
 use App\Models\User;
+use Google_Client;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -206,6 +207,14 @@ class AuthController extends Controller
             return redirect()->to('/'); // Redirect to your desired location after verification
         }
 
-        abort(404); // You can customize this response as needed
     }
+    // public function google()
+    // {
+    //     $CLIENT_ID = "https://203347747842-2uq462l0kh21istb4db60mm87os3tark.apps.googleusercontent.com";
+    //     $client = new Google_Client(['client_id' => $CLIENT_ID]);
+    //     $id_token = 111091520510786751491;
+    //     $payload = $client->verifyIdToken($id_token);
+
+    //     dd($payload );
+    // }
 }

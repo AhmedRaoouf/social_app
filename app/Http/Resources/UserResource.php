@@ -17,8 +17,6 @@ class UserResource extends JsonResource
     {
         $protocol = $request->isSecure() ? 'https' : 'http';
 
-        // Override Laravel's URL generation configuration to force http
-        \URL::forceScheme($protocol);
 
         return [
             'token' => $this->token,

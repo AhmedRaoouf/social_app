@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->text('content')->nullable();
             $table->string('image')->nullable();
+            $table->unsignedInteger('total_likes')->default(0);
+            $table->unsignedInteger('total_comments')->default(0);
             $table->timestamps();
         });
     }

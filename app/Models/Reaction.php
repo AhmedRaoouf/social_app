@@ -10,8 +10,9 @@ class Reaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id', 'user_id', 'post_id', 'react',
+        'id', 'user_id', 'post_id',
     ];
+    protected $table = 'post_reacts';
 
     public function user()
     {
