@@ -183,6 +183,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Firebase' => Kreait\Laravel\Firebase\Facades\Firebase::class,
     ])->toArray(),
 
 ];
