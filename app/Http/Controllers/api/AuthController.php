@@ -224,6 +224,7 @@ class AuthController extends Controller
                 $newuser = new User();
                 $newuser->name = $userData->displayName;
                 $newuser->email = $userData->email;
+                $newuser->email_verified_at = now();
                 $newuser->password = Hash::make($userData->uid . now());
                 $newuser->token = $access_token;
                 $newuser->role_id = Role::where('name', 'user')->value('id');

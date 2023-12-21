@@ -41,7 +41,6 @@ class ProfileController extends Controller
                 $userImage = helper::uploadFile($request->file('image'), 'users/photos/');
                 $user->update(['image' => $userImage]);
             }
-
             if ($request->cover) {
                 $oldCover = $user->cover;
                 if (!empty($oldCover)) {
@@ -60,16 +59,13 @@ class ProfileController extends Controller
                     'latitude' => $request->latitude,
                 ]);
             }
-            return response()->json([
-                'status' => true,
-                'message' => "Your Profile updated successfully",
-                "data" => new UserResource($user)
-            ]);
+            if ($request->birthday) {
+                $user->update(['birthday' => $request->birthday]);
+            }
+            return  helper::responseData(new UserResource($user), "Your Profile updated successfully");
+        } else {
+            return helper::responseError("User Not Found");
         }
-        return response()->json([
-            'status' => false,
-            "message" => 'User Not Found'
-        ]);
     }
 
     public function delete_account(Request $request)
@@ -80,10 +76,7 @@ class ProfileController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:50'],
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors(),
-            ]);
+            return helper::responseError($validator->errors());
         }
         $password_Correct = Hash::check($request->password, $user->password);
         if ($password_Correct) {
@@ -93,10 +86,7 @@ class ProfileController extends Controller
                 'message' => "User $user->name deleted successfully",
             ]);
         } else {
-            return response()->json([
-                'status' => false,
-                "message" => 'Your password is not correct'
-            ]);
+            return helper::responseError('Your password is not correct');
         }
     }
 
@@ -110,10 +100,7 @@ class ProfileController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:50', 'confirmed'],
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors(),
-            ]);
+            return helper::responseError($validator->errors());
         }
         $password_Correct = Hash::check($request->old_password, $user->password);
         if ($password_Correct) {
@@ -127,10 +114,7 @@ class ProfileController extends Controller
                 return response()->json(['message' => 'New password must be different from the previous password']);
             }
         } else {
-            return response()->json([
-                'status' => false,
-                "message" => 'Your old password is not correct'
-            ]);
+            return helper::responseError("Your old password is not correct");
         }
     }
 }
