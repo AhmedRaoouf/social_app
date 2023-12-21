@@ -236,9 +236,5 @@ class AuthController extends Controller
         }
     }
 
-    public function all_users()
-    {
-        $allUsers = User::get();
-        return helper::responseData(UserResource::collection($allUsers));
-    }
+    
 }

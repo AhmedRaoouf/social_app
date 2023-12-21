@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\PostController;
 use App\Http\Controllers\api\ProfileController;
+use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,7 @@ Route::post('/reset/{otp}',[AuthController::class,'reset']);
 
 Route::middleware(['api_auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/all_users', [AuthController::class, 'all_users']);
+
     //Profile
     Route::get('/profile/show', [ProfileController::class, 'show']);
     Route::post('/profile/update', [ProfileController::class, 'update']);
@@ -39,6 +40,10 @@ Route::middleware(['api_auth'])->group(function () {
     Route::post('/user/posts/{postId}/react', [PostController::class, 'reactToPost']);
     Route::post('/user/posts/{postId}/comment', [PostController::class, 'addCommentToPost']);
     Route::get('/user/{userId}/posts', [PostController::class, 'getUserPosts']); #Show other user posts
+
+    //Users
+    Route::get('/users/all', [UserController::class, 'all_users']);
+    Route::get('/users/search', [UserController::class, 'search']);
 
 });
 
