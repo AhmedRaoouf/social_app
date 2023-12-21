@@ -20,6 +20,7 @@ class UserResource extends JsonResource
 
         return [
             'token' => $this->token,
+            'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'email_active' => $this->email_verified_at ? 'Yes' : 'No',

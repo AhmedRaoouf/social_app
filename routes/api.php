@@ -27,7 +27,7 @@ Route::post('/reset/{otp}',[AuthController::class,'reset']);
 
 Route::middleware(['api_auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::get('/all_users', [AuthController::class, 'all_users']);
     //Profile
     Route::get('/profile/show', [ProfileController::class, 'show']);
     Route::post('/profile/update', [ProfileController::class, 'update']);

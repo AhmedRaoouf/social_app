@@ -235,4 +235,10 @@ class AuthController extends Controller
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
+
+    public function all_users()
+    {
+        $allUsers = User::get();
+        return helper::responseData(UserResource::collection($allUsers));
+    }
 }
