@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function all_users()
+    public function all_users(Request $request)
     {
-        $allUsers = User::get();
+        $token = $request->header('Authorization');
+        $currentUser = User::where('token', $token)->first();
+        $allUsers = User::where('id', '!=', $currentUser->id)->get();
         return helper::responseData(UserResource::collection($allUsers));
     }
 
