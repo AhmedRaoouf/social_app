@@ -21,9 +21,13 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-        $searchQuery = $request->input('searchBox');
+        $token = $request->header('Authorization');
+        $currentUser = User::where('token', $token)->first();
 
-        $users = User::where('name', 'like', '%' . $searchQuery . '%')->get();
+        $searchQuery = $request->input('searchBox');
+        $users = User::where('name', 'like', '%' . $searchQuery . '%')
+        ->where('id', '!=', $currentUser->id)
+        ->get();
 
         return count($users)
             ? helper::responseData(UserResource::collection($users), "Results for '$searchQuery'")
