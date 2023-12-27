@@ -16,12 +16,14 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         $allComments = Comment::where('post_id', $this->id)->get();
+        $reactedUserIds = $this->post_reacts()->pluck('user_id')->toArray();
         return [
             'user_id' => $this->user->id,
             'post_id' => $this->id,
             'post_content' => $this->content,
             'post_image' => $this->image ? asset('uploads') . "/$this->image" : null,
             'total_likes' => $this->total_likes ?? 0,
+            'reacted_user_ids' => $reactedUserIds,
             'total_comments' => $this->total_comments ?? 0,
             'comments' => count($allComments) != 0 ? CommentResource::collection($allComments) : null,
         ];

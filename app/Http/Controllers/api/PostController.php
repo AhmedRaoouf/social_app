@@ -47,7 +47,9 @@ class PostController extends Controller
         $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
         $post = Post::where('id', $postId)->first();
+
         if ($post) {
+            $reactedUserIds = $post->post_reacts()->pluck('user_id')->toArray();
             $existingLike = $post->post_reacts()->where('user_id', $user->id)->first();
             if ($existingLike) {
                 $existingLike->delete();
@@ -59,10 +61,15 @@ class PostController extends Controller
                 $message = 'Post liked successfully';
                 $post->increment('total_likes');
             }
-        }
 
-        $totalLikes = $post->total_likes;
-        return helper::responseData(['total_likes' => $totalLikes], $message);
+            $totalLikes = $post->total_likes;
+            return helper::responseData([
+                'total_likes' => $totalLikes,
+                'users' => $reactedUserIds,
+            ], $message);
+        }else{
+            return helper::responseError('Post Not Found!');
+        }
     }
 
     public function addCommentToPost(Request $request, $postId)
