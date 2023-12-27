@@ -38,7 +38,7 @@ class PostController extends Controller
 
             return helper::responseData(new PostResource($post), 'Post created successfully');
         } else {
-            return helper::responseError('Missing data in request');
+            return helper::responseError("you should write 'content' , upload 'image' or both");
         }
     }
 
@@ -47,17 +47,18 @@ class PostController extends Controller
         $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
         $post = Post::where('id', $postId)->first();
-        $existingLike = $post->post_reacts()->where('user_id', $user->id)->first();
-
-        if ($existingLike) {
-            $existingLike->delete();
-            $message = 'Like removed successfully';
-            $post->decrement('total_likes');
-        } else {
-            $like = new Reaction(['user_id' => $user->id, 'post_id' => $postId]);
-            $post->post_reacts()->save($like);
-            $message = 'Post liked successfully';
-            $post->increment('total_likes');
+        if ($post) {
+            $existingLike = $post->post_reacts()->where('user_id', $user->id)->first();
+            if ($existingLike) {
+                $existingLike->delete();
+                $message = 'Like removed successfully';
+                $post->decrement('total_likes');
+            } else {
+                $like = new Reaction(['user_id' => $user->id, 'post_id' => $postId]);
+                $post->post_reacts()->save($like);
+                $message = 'Post liked successfully';
+                $post->increment('total_likes');
+            }
         }
 
         $totalLikes = $post->total_likes;
@@ -85,5 +86,5 @@ class PostController extends Controller
         }
     }
 
-    
+
 }
