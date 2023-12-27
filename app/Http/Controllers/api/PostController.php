@@ -44,7 +44,7 @@ class PostController extends Controller
             ]);
 
             return helper::responseData([
-                'posts' => PostResource::collection($posts),
+                'post' => new PostResource($post),
             ], 'Post created successfully');
         } else {
             return helper::responseError("you should write 'content' , upload 'image' or both");
