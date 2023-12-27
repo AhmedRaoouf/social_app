@@ -215,7 +215,9 @@ class AuthController extends Controller
             $firebase = Firebase::auth();
             $userData = $firebase->getUser($uid);
             $user = User::where('email', $userData->email)->first();
+            $access_token = Str::random(64);
             if ($user != null) {
+                $user->update(['token'=>$access_token]);
                 Auth::login($user);
                 return helper::responseData(new UserResource($user), 'Login successful');
             } else {
@@ -236,5 +238,5 @@ class AuthController extends Controller
         }
     }
 
-    
+
 }
