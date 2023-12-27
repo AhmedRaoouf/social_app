@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         $posts = Post::orderByDesc('created_at')->get();
         return helper::responseData([
-            'posts'=>PostResource::collection($posts),
+            'posts' => PostResource::collection($posts),
         ]);
     }
     public function getUserPosts(Request $request, $userId)
@@ -43,7 +43,9 @@ class PostController extends Controller
                 'image' => $userImage,
             ]);
 
-            return helper::responseData(new PostResource($post), 'Post created successfully');
+            return helper::responseData([
+                'posts' => PostResource::collection($posts),
+            ], 'Post created successfully');
         } else {
             return helper::responseError("you should write 'content' , upload 'image' or both");
         }
@@ -96,6 +98,19 @@ class PostController extends Controller
             }
         } else {
             return helper::responseError('Invalid post');
+        }
+    }
+
+    public function delete_post(Request $request ,$postId)
+    {
+        $token = $request->header('Authorization');
+        $user = User::where('token', $token)->first();
+        $post = Post::where('id', $postId)->first();
+        if ($post) {
+            $post->delete();
+            helper::responseMsg('Post deleted Succesfully');
+        }else{
+            return helper::responseError("This post does not exist");
         }
     }
 }

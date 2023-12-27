@@ -35,4 +35,12 @@ class helper
         $response['data'] = $data;
         return response()->json($response);
     }
+
+    public static function responseMsg($msg)
+    {
+        return response()->json([
+            'status' => true,
+            'msg' => $msg,
+        ]);
+    }
 }
