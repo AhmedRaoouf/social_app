@@ -37,7 +37,7 @@ class PostController extends Controller
         $user = User::where('token', $token)->first();
         $userImage = helper::uploadFile($request->file('image'), 'users/posts/');
 
-        if ($request->has('content') || $request->has('image')) {
+        if ($request->has('content') or $request->has('image')) {
             $post = $user->posts()->create([
                 'content' => $request->content,
                 'image' => $userImage,
@@ -47,9 +47,10 @@ class PostController extends Controller
                 'post' => new PostResource($post),
             ], 'Post created successfully');
         } else {
-            return helper::responseError("you should write 'content' , upload 'image' or both");
+            return helper::responseError("You should provide 'content', upload 'image', or both");
         }
     }
+
 
     public function reactToPost(Request $request, $postId)
     {
