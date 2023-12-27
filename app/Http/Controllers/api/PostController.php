@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function allPosts()
+    {
+        $posts = Post::orderByDesc('created_at')->paginate(5);
+        return helper::responseData(PostResource::collection($posts));
+    }
     public function getUserPosts(Request $request, $userId)
     {
         $user = User::where('id', $userId)->first();
@@ -66,7 +71,7 @@ class PostController extends Controller
                 'total_likes' => $totalLikes,
                 'users' => $reactedUserIds,
             ], $message);
-        }else{
+        } else {
             return helper::responseError('Post Not Found!');
         }
     }
@@ -78,19 +83,17 @@ class PostController extends Controller
         $post = Post::where('id', $postId)->first();
         if ($post) {
             if ($request->content) {
-                $comment = new Comment(['user_id' => $user->id, 'post_id' => $postId,'content' =>$request->content]);
+                $comment = new Comment(['user_id' => $user->id, 'post_id' => $postId, 'content' => $request->content]);
                 $post->post_comments()->save($comment);
                 $message = 'Comment added successfully';
                 $post->increment('total_comments');
                 $totalComments = $post->total_comments;
-                return helper::responseData(['total_comments' => $totalComments,'comment' => $request->content], $message);
-            }else{
+                return helper::responseData(['total_comments' => $totalComments, 'comment' => $request->content], $message);
+            } else {
                 return helper::responseError('Should add comment');
             }
-        }else{
+        } else {
             return helper::responseError('Invalid post');
         }
     }
-
-
 }
