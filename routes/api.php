@@ -41,7 +41,7 @@ Route::middleware(['api_auth'])->group(function () {
     Route::post('/user/posts/{postId}/comment', [PostController::class, 'addCommentToPost']);
     Route::get('/user/{userId}/posts', [PostController::class, 'getUserPosts']); #Show other user posts
     Route::get('/posts', [PostController::class, 'allPosts']); #Show other user posts
-    Route::delete('/post/{id}/delete', [ProfileController::class, 'delete_post']);
+    Route::delete('/post/{id}/delete', [PostController::class, 'delete_post']);
 
 
     //Users
