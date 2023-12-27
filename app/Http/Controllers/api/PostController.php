@@ -107,8 +107,12 @@ class PostController extends Controller
         $user = User::where('token', $token)->first();
         $post = Post::where('id', $postId)->first();
         if ($post) {
-            $post->delete();
-            helper::responseMsg('Post deleted Succesfully');
+            if ($post->user_id == $user->id) {
+                $post->delete();
+                helper::responseMsg('Post deleted Succesfully');
+            }else{
+                return  helper::responseError('You are not authorized to perform this action');
+            }
         }else{
             return helper::responseError("This post does not exist");
         }
