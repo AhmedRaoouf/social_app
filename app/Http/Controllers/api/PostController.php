@@ -15,14 +15,9 @@ class PostController extends Controller
 {
     public function allPosts()
     {
-        $posts = Post::orderByDesc('created_at')->paginate(5);
+        $posts = Post::orderByDesc('created_at')->get();
         return helper::responseData([
             'posts'=>PostResource::collection($posts),
-            'pagination' => [
-                'current_page' => $posts->currentPage(),
-                'per_page' => $posts->perPage(),
-                'total' => $posts->total(),
-            ],
         ]);
     }
     public function getUserPosts(Request $request, $userId)
