@@ -25,7 +25,7 @@ class PostController extends Controller
         $user = User::where('id', $userId)->first();
         if ($user) {
             $posts = $user->posts;
-            return helper::responseData(PostResource::collection($posts));
+            return helper::responseData(['posts' => PostResource::collection($posts)]);
         } else {
             return helper::responseError('User not found');
         }
@@ -44,7 +44,7 @@ class PostController extends Controller
             ]);
 
             return helper::responseData([
-                'posts' => new PostResource($post),
+                'post' => new PostResource($post),
             ], 'Post created successfully');
         } else {
             return helper::responseError("You should provide 'content', upload 'image', or both");
@@ -102,7 +102,7 @@ class PostController extends Controller
         }
     }
 
-    public function delete_post(Request $request ,$postId)
+    public function delete_post(Request $request, $postId)
     {
         $token = $request->header('Authorization');
         $user = User::where('token', $token)->first();
@@ -111,10 +111,10 @@ class PostController extends Controller
             if ($post->user_id == $user->id) {
                 $post->delete();
                 return helper::responseMsg('Post deleted Succesfully');
-            }else{
+            } else {
                 return  helper::responseError('You are not authorized to perform this action');
             }
-        }else{
+        } else {
             return helper::responseError("This post does not exist");
         }
     }
