@@ -37,14 +37,14 @@ class PostController extends Controller
         $user = User::where('token', $token)->first();
         $userImage = helper::uploadFile($request->file('image'), 'users/posts/');
 
-        if ($request->has('content') or $request->has('image')) {
+        if ($request->content or $request->image) {
             $post = $user->posts()->create([
                 'content' => $request->content,
                 'image' => $userImage,
             ]);
 
             return helper::responseData([
-                'post' => new PostResource($post),
+                'posts' => new PostResource($post),
             ], 'Post created successfully');
         } else {
             return helper::responseError("You should provide 'content', upload 'image', or both");
