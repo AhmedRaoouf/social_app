@@ -109,7 +109,7 @@ class PostController extends Controller
         if ($post) {
             if ($post->user_id == $user->id) {
                 $post->delete();
-                helper::responseMsg('Post deleted Succesfully');
+                return helper::responseMsg('Post deleted Succesfully');
             }else{
                 return  helper::responseError('You are not authorized to perform this action');
             }
