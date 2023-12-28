@@ -69,26 +69,37 @@ class ProfileController extends Controller
     }
 
     public function delete_account(Request $request)
-    {
-        $token = $request->header('Authorization');
-        $user = User::where('token', $token)->first();
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string', 'min:8', 'max:50'],
-        ]);
-        if ($validator->fails()) {
-            return helper::responseError($validator->errors());
-        }
-        $password_Correct = Hash::check($request->password, $user->password);
-        if ($password_Correct) {
-            $user->delete();
-            return response()->json([
-                'status' => true,
-                'message' => "User $user->name deleted successfully",
-            ]);
-        } else {
-            return helper::responseError('Your password is not correct');
-        }
+{
+    $token = $request->header('Authorization');
+    $user = User::where('token', $token)->first();
+
+    $validator = Validator::make($request->all(), [
+        'password' => ['required', 'string', 'min:8', 'max:50'],
+    ]);
+
+    if ($validator->fails()) {
+        return helper::responseError($validator->errors());
     }
+
+    $passwordCorrect = Hash::check($request->password, $user->password);
+
+    if ($passwordCorrect) {
+        $user->posts()->each(function ($post) {
+            $post->comments()->delete();
+            $post->reacts()->delete();
+        });
+        $user->posts()->delete();
+        $user->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => "User $user->name and associated posts deleted successfully",
+        ]);
+    } else {
+        return helper::responseError('Your password is not correct');
+    }
+}
+
 
     public function update_password(Request $request)
     {
