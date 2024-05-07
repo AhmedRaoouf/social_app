@@ -63,7 +63,7 @@ class PostController extends Controller
             if ($existingLike) {
                 $existingLike->delete();
                 $message = 'Like removed successfully';
-                $post->decrement('total_likes');
+                $post->ser('total_likes');
             } else {
                 $like = new Reaction(['user_id' => $user->id, 'post_id' => $postId]);
                 $post->post_reacts()->save($like);

@@ -42,7 +42,7 @@ class AuthController extends Controller
             'role_id'  => Role::where('name', 'user')->value('id'),
         ]);
         // Send email verification notification
-        $user->sendEmailVerificationNotification();
+        
 
         return response()->json([
             "status"  => true,

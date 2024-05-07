@@ -43,7 +43,6 @@ Route::middleware(['api_auth'])->group(function () {
     Route::get('/posts', [PostController::class, 'allPosts']); #Show other user posts
     Route::delete('/post/{id}/delete', [PostController::class, 'delete_post']);
 
-
     //Users
     Route::get('/users/all', [UserController::class, 'all_users']);
     Route::get('/users/search', [UserController::class, 'search']);

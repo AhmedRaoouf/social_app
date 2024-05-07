@@ -1,0 +1,13 @@
+عيمل 
+طاقم
+مسئول 
+الادمن
+
+location_id
+NameModuleNotificationsDatabaseSeeder//Database
+
+
+
+NameModuleContentGenerator // Http/ContentGenerators
+NameModuleTages // Http/ReplaceableTags
+NameModuleTagsList // Http/ReplaceableTags/TagsLists
